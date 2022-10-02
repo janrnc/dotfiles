@@ -1,0 +1,32 @@
+# clear
+alias c='clear'
+
+# git commit message
+gcmm() {
+    git commit -m "$1"
+}
+
+# docker stop all
+# > stops all running docker containers
+alias dsa='docker stop $(docker ps -q) > /dev/null'
+
+# docker shell
+# > enters docker container shell
+ds() {
+    docker exec -it $1 sh
+}
+
+# my repos
+# > enters myrepos folder
+alias mr='cd ${MY_REPOS}'
+
+# docker pretty ps
+alias dpps='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.State}}\t{{.Status}}"'
+
+# git submodule sync
+# > Syncs and updates all git submodules
+alias gsubsync='git submodule sync --recursive; git submodule update --recursive --init'
+
+# git remove gone
+# > deletes local branches that have been deleted in remote repo
+alias gremgone='git fetch -p && for branch in $(git branch -vv | grep ": gone]" | awk "{print $1}"); do git branch -D $branch; done'
