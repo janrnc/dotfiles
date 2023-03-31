@@ -1,4 +1,5 @@
 #!/bin/sh
+cd $(realpath $(dirname "$0"))
 
 inst() {
     FOLDER_NAME=$1
