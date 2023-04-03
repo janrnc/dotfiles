@@ -1,6 +1,7 @@
 #!/bin/sh
 RED='\033[0;31m'
 GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
 NO_COLOR='\033[0m'
 ERROR_COLOR=${RED}
 ERROR_NO_COLOR=${NO_COLOR}
@@ -8,6 +9,7 @@ ERROR_NO_COLOR=${NO_COLOR}
 if [ ! -t 1 ] ; then
     RED=""
     GREEN=""
+    ORANGE=""
     NO_COLOR=""
 fi
 if [ ! -t 2 ] ; then
@@ -33,4 +35,8 @@ uninstalled() {
 
 error() {
     echo "${ERROR_COLOR}ERROR${ERROR_NO_COLOR}: $1" >&2
+}
+
+warn() {
+    echo "${ORANGE}WARN${NO_COLOR}: $1"
 }
