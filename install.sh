@@ -16,6 +16,7 @@ inst() {
     fi
     installing "${FOLDER_NAME} ${VERSION}"
     . ./install.sh
+    installed "${FOLDER_NAME}"
     eval $(sed -E 's/\=(.*)/=""/g' ./.env)
     cd ..
 }
