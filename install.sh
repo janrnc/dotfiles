@@ -3,20 +3,20 @@ cd $(realpath $(dirname "$0"))
 . ./echo.sh
 
 inst() {
-    FOLDER_NAME=$1
-    cd ./${FOLDER_NAME}
+    NAME=$1
+    cd ./${NAME}
 
     if [ -f .env ]; then
         . ./.env
     else
-        warn "No .env found for package '${FOLDER_NAME}'"
+        warn "No .env found for package '${NAME}'"
     fi
     if [ -z "${VERSION}" ]; then
         VERSION="<unknown version>"
     fi
-    installing "${FOLDER_NAME} ${VERSION}"
+    installing "${NAME} ${VERSION}"
     . ./install.sh
-    installed "${FOLDER_NAME}"
+    installed "${NAME}"
     eval $(sed -E 's/\=(.*)/=""/g' ./.env)
     cd ..
 }
