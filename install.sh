@@ -3,6 +3,7 @@ cd $(realpath $(dirname "$0"))
 . ./echo.sh
 
 inst() {
+    set -e
     NAME=$1
     cd ./${NAME}
 
