@@ -9,4 +9,4 @@ if ! [ -x "$(command -v envsubst)" ]; then
     exit 1
 fi
 export MY_REPOS
-envsubst '${MY_REPOS}' < ${SCRIPT_DIR}/.aliases > ~/.aliases
+envsubst '${MY_REPOS}' < ./.aliases > ~/.aliases
