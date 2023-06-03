@@ -18,7 +18,9 @@ inst() {
     installing "${NAME} ${VERSION}"
     . ./install.sh
     installed "${NAME}"
-    eval $(sed -E 's/\=(.*)/=""/g' ./.env)
+    if [ -f .env ]; then
+        eval $(sed -E 's/\=(.*)/=""/g' ./.env)
+    fi
     cd ..
 }
 
