@@ -12,6 +12,6 @@ FILE_NAME=go${VERSION}.linux-amd64.tar.gz
 
 curl -L --output ${FILE_NAME} "https://go.dev/dl/${FILE_NAME}"
 sudo tar -C /usr/local -xzf go${VERSION}.linux-amd64.tar.gz
-echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.zshrc
+echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ~/.zshrc
 
 rm -r ${TEMP_DIR}
