@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+#/ command: dropbox:install: "install dropbox in the system"
+#/ usage: rerun dropbox:install  --version <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: VERSION
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+TEMP_DIR=$(mktemp -d)
+cd ${TEMP_DIR}
+
+PACKAGE_NAME=dropbox_${VERSION}_amd64.deb
+
+curl -L --output ${PACKAGE_NAME} "https://www.dropbox.com/download?dl=packages/ubuntu/${PACKAGE_NAME}"
+sudo apt install ./${PACKAGE_NAME}
+
+rm -r ${TEMP_DIR}
+
+# Done. Exit with last command exit status.
+exit $?
+
