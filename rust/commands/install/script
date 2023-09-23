@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+#/ command: rust:install: "install rust in the system"
+#/ usage: rerun rust:install [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+if [ $(command -v rustc) ]; then
+  rerun_die "previous installation found, please uninstall the current version before reinstalling" 
+fi
+
+TEMP_DIR=$(mktemp -d)
+cd ${TEMP_DIR}
+
+curl -o installer.sh --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs
+sh ./installer.sh -y
+
+rm -r ${TEMP_DIR}
+
+# Done. Exit with last command exit status.
+exit $?
+
