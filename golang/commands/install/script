@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+#/ command: golang:install: "install golang in the system"
+#/ usage: rerun golang:install  --version <>  --shell-rc <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: VERSION SHELL_RC
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+if [ "$(ls -A /usr/local/go)" ]; then
+  rerun_die "previous installation found in /usr/local/go. Please uninstall the current version before reinstalling" 
+fi
+
+TEMP_DIR=$(mktemp -d)
+cd ${TEMP_DIR}
+
+FILE_NAME=go${VERSION}.linux-amd64.tar.gz
+
+curl -L --output ${FILE_NAME} "https://go.dev/dl/${FILE_NAME}"
+sudo tar -C /usr/local -xzf go${VERSION}.linux-amd64.tar.gz
+echo "export PATH=\$PATH:/usr/local/go/bin:\$HOME/go/bin" >> ${SHELL_RC}
+
+rm -r ${TEMP_DIR}
+
+# Done. Exit with last command exit status.
+exit $?
+
