@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+#/ command: aliases:install: "install aliases in the system"
+#/ usage: rerun aliases:install  --mr <> 
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: MR
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+if [ -f ~/.aliases ]; then
+  rerun_die ".aliases already exists in ~/.aliases, please remove it and retry" 
+fi
+
+if ! [ -x "$(command -v envsubst)" ]; then
+  rerun_die "envsubst command not found."
+fi
+
+MY_REPOS=${MR}
+export MY_REPOS
+envsubst '${MY_REPOS}' < ${RERUN_MODULE_DIR}/.aliases > ~/.aliases
+
+# Done. Exit with last command exit status.
+exit $?
+
