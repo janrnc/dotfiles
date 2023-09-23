@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+#/ command: imagemagick:uninstall: "remove imagemagick from the system"
+#/ usage: rerun imagemagick:uninstall [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "uninstall" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+sudo apt purge imagemagick
+
+# Done. Exit with last command exit status.
+exit $?
+
