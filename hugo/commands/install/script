@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+#/ command: hugo:install: "install hugo in the system"
+#/ usage: rerun hugo:install [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+if ! command -v go &> /dev/null; then
+  rerun_die "golang not found"
+fi
+
+CGO_ENABLED=1 go install -tags extended github.com/gohugoio/hugo@latest
+
+# Done. Exit with last command exit status.
+exit $?
+
