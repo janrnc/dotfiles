@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+#/ command: dropbox:jsonmd: "kindle highlights and notes from json to md"
+#/ usage: rerun dropbox:jsonmd [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "jsonmd" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+find . -iname "*.json" -exec sh -c '
+  TITLE=$(cat "$0" | jq '.title')
+  TITLE="${TITLE%\"}"
+  TITLE="${TITLE#\"}"
+  
+  > "./${TITLE}.md"
+
+  AUTHORS=$(cat "$0" | jq '.authors')
+  AUTHORS="${AUTHORS%\"}"
+  AUTHORS="${AUTHORS#\"}"
+
+  echo "Authors: ${AUTHORS}" >> "./${TITLE}.md"
+
+  cat "$0" | jq -c '.highlights[]' | while read -r highlight; do
+    TEXT=$(echo "$highlight" | jq '.text')
+    TEXT="${TEXT%\"}"
+    TEXT="${TEXT#\"}"
+    
+    echo "- - -\n> ${TEXT}" >> "./${TITLE}.md"
+
+    NOTE=$(echo "$highlight" | jq '.note')
+    if [ "${NOTE}" = "null" ]; then
+      continue
+    fi
+
+    NOTE="${NOTE%\"}"
+    NOTE="${NOTE#\"}"
+    echo "\n${NOTE}\n" >> "./${TITLE}.md"
+  done
+' "{}" \;
+
+# Done. Exit with last command exit status.
+exit $?
+
