@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+#/ command: zsh:install: "install zsh in the system"
+#/ usage: rerun zsh:install [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "install" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+if [ -x "$(command -v zsh)" ]; then
+  rerun_die "zsh already installed"
+fi
+if ! [ -x "$(command -v curl)" ]; then
+  rerun_die "curl command not found"
+fi
+if ! [ -x "$(command -v git)" ]; then
+  rerun_die "git command not found"
+fi
+
+# zsh
+sudo apt install zsh
+chsh -s $(which zsh)
+
+# oh my zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# plugins
+PLUGINS="${HOME}/.oh-my-zsh/plugins"
+if [ ! -d "${PLUGINS}/zsh-autosuggestions" ]; then
+  git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions "${PLUGINS}"/zsh-autosuggestions
+fi
+if [ ! -d "${PLUGINS}/zsh-completions" ]; then
+  git clone --depth 1 https://github.com/zsh-users/zsh-completions "${PLUGINS}/zsh-completions"
+fi
+if [ ! -d "${PLUGINS}/zsh-syntax-highlighting" ]; then
+  git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting "${PLUGINS}/zsh-syntax-highlighting"
+fi
+
+# zshrc
+cp ${RERUN_MODULE_DIR}/.zshrc ~/.zshrc
+
+# Done. Exit with last command exit status.
+exit $?
+
