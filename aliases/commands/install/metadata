@@ -3,5 +3,5 @@
 # Sat Sep 23 11:41:36 AM CEST 2023
 NAME=install
 DESCRIPTION="install aliases in the system"
-OPTIONS="mr"
+OPTIONS=""
 GENERATE_HELP="true"

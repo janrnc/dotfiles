@@ -16,10 +16,6 @@ ds() {
     docker exec -it $1 sh
 }
 
-# my repos
-# > enters myrepos folder
-alias mr='cd ${MY_REPOS}'
-
 # docker pretty ps
 alias dpps='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.State}}\t{{.Status}}"'
 
