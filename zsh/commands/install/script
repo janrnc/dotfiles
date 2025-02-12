@@ -33,6 +33,9 @@ chsh -s $(which zsh)
 # oh my zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# theme
+cp ${RERUN_MODULE_DIR}/fino.zsh-theme ~/.oh-my-zsh/custom/themes/fino.zsh-theme
+
 # plugins
 PLUGINS="${HOME}/.oh-my-zsh/plugins"
 if [ ! -d "${PLUGINS}/zsh-autosuggestions" ]; then
@@ -46,7 +49,13 @@ if [ ! -d "${PLUGINS}/zsh-syntax-highlighting" ]; then
 fi
 
 # zshrc
-cp ${RERUN_MODULE_DIR}/.zshrc ~/.zshrc
+yes | cp -f ${RERUN_MODULE_DIR}/.zshrc ~/.zshrc
+
+# rerun
+echo "export PATH=\$PATH:\$HOME/.rerun" >> ~/.zshrc
+echo "[ -r \$HOME/.rerun/etc/bash_completion.sh ] && source \$HOME/.rerun/etc/bash_completion.sh" >> ~/.zshrc
+echo "[ -t 0 ] && export RERUN_COLOR=true" >> ~/.zshrc
+echo "export RERUN_MODULES=${DIR}" >> ~/.zshrc
 
 # Done. Exit with last command exit status.
 exit $?
