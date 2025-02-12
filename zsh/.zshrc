@@ -105,3 +105,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#cc00cc"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+if [ -f ~/.aliases ]; then
+    source ~/.aliases
+fi

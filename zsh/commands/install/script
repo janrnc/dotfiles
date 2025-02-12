@@ -52,10 +52,12 @@ fi
 yes | cp -f ${RERUN_MODULE_DIR}/.zshrc ~/.zshrc
 
 # rerun
+echo >> ~/.zshrc
+echo "# rerun" >> ~/.zshrc
 echo "export PATH=\$PATH:\$HOME/.rerun" >> ~/.zshrc
 echo "[ -r \$HOME/.rerun/etc/bash_completion.sh ] && source \$HOME/.rerun/etc/bash_completion.sh" >> ~/.zshrc
 echo "[ -t 0 ] && export RERUN_COLOR=true" >> ~/.zshrc
-echo "export RERUN_MODULES=${DIR}" >> ~/.zshrc
+echo "export RERUN_MODULES=$(realpath ${RERUN_MODULE_DIR}/../)" >> ~/.zshrc
 
 # Done. Exit with last command exit status.
 exit $?
