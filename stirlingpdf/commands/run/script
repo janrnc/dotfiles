@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+#/ command: stirlingpdf:run: "runs stirling-pdf docker container"
+#/ usage: rerun stirlingpdf:run [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "run" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+docker container stop stirling-pdf &> /dev/null || true
+docker container rm stirling-pdf &> /dev/null || true
+docker run -d --name stirling-pdf -p 8080:8080 docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+
+# Done. Exit with last command exit status.
+exit $?
+
